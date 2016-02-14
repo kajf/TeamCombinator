@@ -27,6 +27,12 @@
     <div class="container">
       <div class="header">
         <h3 class="text-muted">Team Combinator</h3>
+        <p>This is a small app to generate 4 players combinations for kicker (foosball) matches.</p>
+        <ul>
+          <li>Algorithm selects players with less total games played</li>
+          <li>Algorithm puts players on positions (goalee or forward) where they played less, randomly breaking ties</li>
+          <li>Algorithm selects balanced teams: less experienced goalee would play with more experienced forward</li>
+        </ul>
         <p id="warnings" class="bg-warning hidden">At least 4 players needed to generate team</p>
       </div>
 
@@ -34,7 +40,7 @@
         <input id="player" type="text" class="form-control" placeholder="Type player name and hit enter">
 
         <table id="players" class="table">
-          <caption>All players participating in mathces</caption>
+          <caption>All players participating in matches</caption>
           <thead>
           <tr>
             <th></th>
@@ -50,6 +56,7 @@
         </table>
         <button id="generate" type="button" class="btn btn-default">Generate!</button>
         <table id="matches" class="table">
+          <caption>Generated matches for players from above</caption>
           <thead>
           <tr>
             <th></th>
