@@ -49,14 +49,21 @@
 
     items.forEach(function(item, index){
       var row = table.insertRow(-1);
+      var closeBtn = document.createElement('button');
+      closeBtn.setAttribute('class', 'close');
+      closeBtn.setAttribute('type', 'button');
+      closeBtn.setAttribute('aria-label', 'Close');
       var span = document.createElement('span');
-      span.setAttribute('class', 'glyphicon glyphicon-remove');
-      span.addEventListener('click', function (e) {
+      span.setAttribute('aria-hidden', 'true');
+      span.innerText = '×';
+      closeBtn.appendChild(span);
+
+      closeBtn.addEventListener('click', function (e) {
 
         items.splice(index, 1);
         app.refreshTable(selector, items);
       });
-      row.insertCell(-1).appendChild(span);
+      row.insertCell(-1).appendChild(closeBtn);
 
       item.getCells().forEach(function(cell){
         row.insertCell(-1).innerText = cell;
@@ -77,6 +84,8 @@
   // TODO move generation to separate js
 
   // TODO cell colors (2 reds and 2 blues)
+
+  // TODO validate that at least 4 players
 
   app.generate = function () {
 
