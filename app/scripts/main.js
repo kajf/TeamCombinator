@@ -47,8 +47,16 @@
   app.refreshTable = function(selector, items) {
     var table = app.clearTable(selector);
 
-    items.forEach(function(item){
+    items.forEach(function(item, index){
       var row = table.insertRow(-1);
+      var span = document.createElement('span');
+      span.setAttribute('class', 'glyphicon glyphicon-remove');
+      span.addEventListener('click', function (e) {
+
+        items.splice(index, 1);
+        app.refreshTable(selector, items);
+      });
+      row.insertCell(-1).appendChild(span);
 
       item.getCells().forEach(function(cell){
         row.insertCell(-1).innerText = cell;
@@ -68,7 +76,6 @@
 
   // TODO move generation to separate js
 
-  // TODO remove player and team functions
   // TODO cell colors (2 reds and 2 blues)
 
   app.generate = function () {
