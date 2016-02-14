@@ -21,7 +21,7 @@
     }
   };
 
-  var Team = function (bg, bf, rg, rf) {
+  var Match = function (bg, bf, rg, rf) {
     this.id = getRandomInt();
     this.blueGoalee = bg;
     this.blueForward = bf;
@@ -47,7 +47,7 @@
   };
 
   app.players = [];
-  app.count = 6; // TODO generated at a time
+  app.count = 6;
   app.teams = [];
 
   app.players.push(new Player('Aliaksandr'));
@@ -116,23 +116,42 @@
       return a.total() - b.total();
     });
 
-    // TODO select goalee/forward according to less played
+    var match = app.players.slice(0,4);
 
-    // TODO combine less experienced and more experienced in one team
+    // select goalee according to less experience
+    var blueGoalee = app.popLessExperiencedGoalee(match);
+    var redGoalee = app.popLessExperiencedGoalee(match);
 
-    // TODO break ties randomly
+    // combine less experienced goalee and more experienced forward
+    const firstIsMoreExperiencedForward = (match[0].asForward > match[1].asForward);
+
+    var blueForward = firstIsMoreExperiencedForward ? match[0] : match[1];
+    var redForward = firstIsMoreExperiencedForward ? match[1] : match[0];
 
     // increment players' statistics
-    app.players[0].asGoalee++;
-    app.players[1].asForward++;
-    app.players[2].asGoalee++;
-    app.players[3].asForward++;
+    blueGoalee.asGoalee++;
+    blueForward.asForward++;
+    redGoalee.asGoalee++;
+    redForward.asForward++;
 
     app.refreshTable('#players', app.players);
 
-    app.teams.push(new Team(app.players[0],app.players[1],app.players[2],app.players[3]));
-
+    app.teams.push(new Match(blueGoalee,blueForward,redGoalee,redForward));
     app.refreshTable('#teams', app.teams);
+  };
+
+  app.popLessExperiencedGoalee = function (players) {
+    var lessExperienced = players[0];
+
+    players.forEach(function (player) {
+      if (lessExperienced.asGoalee > player.asGoalee) {
+        lessExperienced = player;
+      }
+    });
+
+    players.splice(players.indexOf(lessExperienced), 1);
+
+    return lessExperienced;
   };
 
   document.querySelector('#player').addEventListener('keypress', function (e) {
