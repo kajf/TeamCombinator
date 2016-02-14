@@ -158,7 +158,14 @@
 
     if (e.keyCode == 13) {
 
-      app.players.push(new Player(e.target.value));
+      const text = e.target.value;
+      const fields = text.split(':');
+
+      if (fields[0].trim().length === 0) {
+        return false;
+      }
+
+      app.players.push(new Player(fields[0], +fields[1], +fields[2]));
       e.target.value = '';
       app.refreshTable('#players', app.players);
 
@@ -169,4 +176,3 @@
 
   app.refreshTable('#players', app.players);
 })();
-
