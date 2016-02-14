@@ -15,6 +15,9 @@
 
     this.getCells = function () {
       return [this.id, this.name, this.asGoalee, this.asForward, this.total()];
+    };
+
+    this.onDelete = function () {
     }
   };
 
@@ -27,6 +30,15 @@
 
     this.getCells = function () {
       return [this.id, this.blueGoalee.name, this.blueForward.name, this.redGoalee.name, this.redForward.name];
+    };
+
+    this.onDelete = function () {
+      this.blueGoalee.asGoalee--;
+      this.blueForward.asForward--;
+      this.redGoalee.asGoalee--;
+      this.redForward.asForward--;
+
+      app.refreshTable('#players', app.players);
     };
   };
 
@@ -49,6 +61,7 @@
 
     items.forEach(function(item, index){
       var row = table.insertRow(-1);
+
       var closeBtn = document.createElement('button');
       closeBtn.setAttribute('class', 'close');
       closeBtn.setAttribute('type', 'button');
@@ -59,6 +72,7 @@
       closeBtn.appendChild(span);
 
       closeBtn.addEventListener('click', function (e) {
+        item.onDelete();
 
         items.splice(index, 1);
         app.refreshTable(selector, items);
@@ -87,13 +101,14 @@
 
   // TODO validate that at least 4 players
 
+  // TODO update players on team delete
+
   app.generate = function () {
 
     // find 4 less times played
     app.players.sort(function (a, b) {
       return a.total() - b.total();
     });
-    app.refreshTable('#players', app.players);
 
     // TODO select goalee/forward according to less played
 
@@ -101,11 +116,13 @@
 
     // TODO break ties randomly
 
-    // increment players statistics
+    // increment players' statistics
     app.players[0].asGoalee++;
     app.players[1].asForward++;
     app.players[2].asGoalee++;
     app.players[3].asForward++;
+
+    app.refreshTable('#players', app.players);
 
     app.teams.push(new Team(app.players[0],app.players[1],app.players[2],app.players[3]));
 
