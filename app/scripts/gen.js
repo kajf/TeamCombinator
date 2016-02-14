@@ -13,17 +13,35 @@ var gen = {
     var blueGoalee = gen.popLessExperiencedGoalee(match);
     var redGoalee = gen.popLessExperiencedGoalee(match);
 
-    // combine less experienced goalee and more experienced forward
-    const firstIsMoreExperiencedForward = (match[0].asForward > match[1].asForward);
+    if (blueGoalee.asGoalee === redGoalee.asGoalee) {
+      if (Math.random()<.5) {
+        blueGoalee = [redGoalee, redGoalee = blueGoalee][0];// swap
+      }// 50% probability to change team
+    }
 
-    var blueForward = firstIsMoreExperiencedForward ? match[0] : match[1];
-    var redForward = firstIsMoreExperiencedForward ? match[1] : match[0];
+    var blueForward = match[0];
+    var redForward = match[1];
 
-    // TODO randomize
+    if (blueForward.asForward === redForward.asForward) {
+      if (Math.random()<.5) {
+        blueForward = [redForward, redForward = blueForward][0];// swap
+      }// 50% probability to change team
+    } else {
+      // combine less experienced goalee and more experienced forward
+      const blueGoaleeIsMoreExperienced = (blueGoalee.asGoalee > redGoalee.asGoalee);
+      const blueForwardIsMoreExperienced = (blueForward.asForward > redForward.asForward);
+
+      // either blues both more experienced or both less experienced
+      // in these cases - swap
+      if (blueGoaleeIsMoreExperienced === blueForwardIsMoreExperienced) {
+        blueForward = [redForward, redForward = blueForward][0];// swap
+      }
+    }
 
     // increment players' statistics
     blueGoalee.asGoalee++;
     blueForward.asForward++;
+
     redGoalee.asGoalee++;
     redForward.asForward++;
 
