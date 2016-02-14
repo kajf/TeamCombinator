@@ -99,9 +99,15 @@
 
   // TODO cell colors (2 reds and 2 blues)
 
-  // TODO validate that at least 4 players
+  app.tryGenerate = function () {
+    document.querySelector('#warnings').classList.add('hidden');
+    if (app.players.length < 4) {
+      document.querySelector('#warnings').classList.remove('hidden');
+      return;
+    }
 
-  // TODO update players on team delete
+    app.generate();
+  };
 
   app.generate = function () {
 
@@ -140,7 +146,7 @@
       return false;
     }
   });
-  document.querySelector('#generate').addEventListener('click', app.generate);
+  document.querySelector('#generate').addEventListener('click', app.tryGenerate);
 
   app.refreshTable('#players', app.players);
 })();
